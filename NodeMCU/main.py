@@ -1,9 +1,3 @@
-# Not exactly sure what goes in this file.
-
-# In any case the code below was loaded and tested on my
-# NodeMCU as main.py which is also in the NodeMCU directory.
-
-
 import time
 from machine import Pin
 
