@@ -23,6 +23,7 @@ e500_response_template = """HTTP/1.0 500 INTERNAL SERVER ERROR
 %s
 """
 import logging
+import time as t
 import machine
 import ntptime, utime
 from machine import RTC, Pin
@@ -31,15 +32,13 @@ logging.basicConfig(level=logging.INFO)
 
 logging.info("Begin main.py initializations.")
 
-# Pin 9 (SDD2) was causing resets for some reason when latched.
-# Changed to 10 (SDD3)
-pin10_SDD3 = Pin(10, Pin.OUT)
+pin9_SD2 = Pin(9, Pin.OUT)
 
 ntptime.timeout = 10
 
-seconds = ntptime.time()
-rtc = RTC()
-rtc.datetime(utime.localtime(seconds))
+# seconds = ntptime.time()
+# rtc = RTC()
+# rtc.datetime(utime.localtime(seconds))
 
 adc = machine.ADC(0)
 
@@ -74,12 +73,12 @@ def dummy():
     return response_template % body
 
 def light_on():
-     pin10_SDD3.value(1)
+     pin9_SD2.value(1)
      body = "You turned a light on!"
      return response_template % body
 
 def light_off():
-     pin10_SDD3.value(0)
+     pin9_SD2.value(0)
      body = "You turned a light off!"
      return response_template % body
 
@@ -104,7 +103,7 @@ def main():
     s.listen(5)
     print("Listening, connect your browser to http://<this_host>:8080/")
 
-    keep_running = True
+    keep_running = False
     
     while keep_running:
             
