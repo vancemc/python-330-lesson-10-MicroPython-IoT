@@ -35,6 +35,8 @@ logging.info("Begin main.py initializations.")
 # Changed to 10 (SDD3)
 pin10_SDD3 = Pin(10, Pin.OUT)
 
+switch_pin = machine.Pin(10, machine.Pin.IN)
+
 ntptime.timeout = 10
 
 seconds = ntptime.time()
@@ -73,6 +75,10 @@ def dummy():
     body = "This is a dummy endpoint"
     return response_template % body
 
+def switch():
+     body = '{state: ' + f'{switch_pin.value()}' + '}'
+     return response_template % body
+
 def light_on():
      pin10_SDD3.value(1)
      body = "You turned a light on!"
@@ -88,6 +94,7 @@ handlers = {
     'dummy': dummy,
     'light_on': light_on,
     'light_off': light_off,
+    'switch': switch,
 }
 
 def main():
