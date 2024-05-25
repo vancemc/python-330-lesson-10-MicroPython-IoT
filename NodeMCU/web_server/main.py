@@ -89,12 +89,17 @@ def light_off():
      body = "You turned a light off!"
      return response_template % body
 
+def light_intensity():
+    body = '{value: ' + f'{adc.read()}' + '}'
+    return response_template % body
+
 handlers = {
     'time': time,
     'dummy': dummy,
     'light_on': light_on,
     'light_off': light_off,
     'switch': switch,
+    'light_intensity': light_intensity,
 }
 
 def main():
