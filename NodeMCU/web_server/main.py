@@ -45,6 +45,10 @@ rtc.datetime(utime.localtime(seconds))
 
 adc = machine.ADC(0)
 
+pwm = machine.Pin(13)
+
+pwm = machine.PWM(pwm)
+
 def time():
     
     response = response_template & 'Disabled dute to ntptime timeouts.'
@@ -93,6 +97,14 @@ def light_intensity():
     body = '{value: ' + f'{adc.read()}' + '}'
     return response_template % body
 
+def light_sensitive_led():
+    # LED gets brighter as ambient light gets darker
+    light_intensity = adc.read()
+    led_brightness = 1100 - light_intensity
+    pwm.duty(led_brightness)
+    body = f'Ambient light intensity value: {light_intensity}, LED Brightness value: {led_brightness}'
+    return response_template % body
+    
 handlers = {
     'time': time,
     'dummy': dummy,
@@ -100,6 +112,7 @@ handlers = {
     'light_off': light_off,
     'switch': switch,
     'light_intensity': light_intensity,
+    'light_sensitive_led': light_sensitive_led,
 }
 
 def main():
